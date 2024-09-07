@@ -11,13 +11,23 @@ void leer_geom(char* nom_fichero, mol* molecula){
     arch= fopen(nom_fichero, "rt");
     int i;
     char simb[2];
+    double P_X, P_Y, P_Z;
 
     fscanf(arch,"%d",&N_atoms);
     molecula->N = N_atoms;
     molecula->arr_atoms = malloc(N_atoms* sizeof(atom));
     fscanf(arch,"%s",coment);
     for (i=0;i<N_atoms;i++){
-        fscanf(arch, "%s %lf %lf %lf",simb, &molecula->arr_atoms[i].pos[0],&molecula->arr_atoms[i].pos[1],&molecula->arr_atoms[i].pos[2]);
+        fscanf(arch, "%s %lf %lf %lf",simb, &P_X,&P_Y,&P_Z);
+        printf("%lf %lf %lf\n",P_X,P_Y,P_Z);
+
+        molecula->arr_atoms[i].pos[0]=P_X;
+        molecula->arr_atoms[i].pos[1]=P_Y;
+        molecula->arr_atoms[i].pos[2]=P_Z;
+
+
+
+
         molecula->arr_atoms[i].M = M_a(simb);
         molecula->arr_atoms[i].Z = Z(simb);
         molecula->arr_atoms[i].id_atom =i;
@@ -27,10 +37,11 @@ void leer_geom(char* nom_fichero, mol* molecula){
 
 void impr_mol (mol molecula){
     int i;
+    printf("El número de átomos es %d\n",molecula.N);
     printf("#Atomo   Z   Masa         x          y           z\n");
     printf("---------------------------------------------------------\n");
     for (i=0;i<molecula.N;i++){
-        printf("%d        %d   %lf     %lf   %lf    %lf\n",molecula.arr_atoms[i].id_atom,molecula.arr_atoms[i].Z,molecula.arr_atoms[i].M,molecula.arr_atoms[i].pos[0],molecula.arr_atoms[i].pos[1],molecula.arr_atoms[i].pos[2]);
+        printf("   %lf   %lf    %lf\n",molecula.arr_atoms[i].pos[0],molecula.arr_atoms[i].pos[1],molecula.arr_atoms[i].pos[2]);
     }
     printf("\n");
 }

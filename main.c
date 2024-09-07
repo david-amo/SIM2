@@ -6,16 +6,13 @@ int main() {
     double array[3];
     double dec;
     mol molecula;
-    leer_geom("benceno.xyz",&molecula);
+    leer_geom("h2o.xyz",&molecula);
+
 
 
     matrix MDIN;
     matriz_inicializar(&MDIN,molecula.N,molecula.N);
     cons_MDIN(MDIN,molecula);
-    printf("matriz de distancias internucleares\n");
-    matriz_imprimir(MDIN);
-
-
 
 
 
@@ -27,14 +24,34 @@ int main() {
 
 
 
+
     double* cdm = malloc(3* sizeof(double));
-    calc_cdm(molecula,cdm);
-    origen_cdm(cdm,molecula);
-    printf ("Molecula a analizar 1:\n");
+
+    printf("\n\nAntes del traslado de CDM\n");
+    printf("-------------------------\n");
     impr_mol(molecula);
+
+    calc_cdm(molecula,cdm);
+    printf ("CDM\n");
+    for (int coord=0; coord<3; coord++) {
+        printf ("%lf\n",cdm[coord]);;
+    }
+    origen_cdm(cdm,molecula);
+
+    printf("\n\nTras el traslado de CDM\n");
+    printf("-------------------------\n");
+    impr_mol(molecula);
+
+
+
+    printf ("Molecula a analizar 1:\n");
+
+    printf("\n\nFIN DEL ANALISIS\n\n");
+
     int num_sets=cons_sets_SEA(&array_SEAS,molecula);
     calc_cdm(molecula,cdm);
-    printf("CDM MOLECULA------>    x:%lf\ty:%lf\tz:%lf\n",cdm[0],cdm[1],cdm[2]);
+    printf("\nCDM MOLECULA------>    x:%lf\ty:%lf\tz:%lf\n\n",cdm[0],cdm[1],cdm[2]);
+
 
 
     int i;
@@ -43,9 +60,26 @@ int main() {
         printf("-----------------------------------\n");
         impr_mol(array_SEAS[i]);
         calc_cdm(array_SEAS[i],cdm);
-        printf("CDM SET %d------>    x:%lf\ty:%lf\tz:%lf\n",i,cdm[0],cdm[1],cdm[2]);
+        printf("CDM SET %d------>    x:%lf\ty:%lf\tz:%lf\n\n\n",i,cdm[0],cdm[1],cdm[2]);
     }
     free(cdm);
+    getchar();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     elem_sim* arr_elems = malloc (sizeof(elem_sim));
 
     double** arr_cdmsets ;
@@ -81,6 +115,9 @@ int main() {
         if (array_SEAS[i].N>1)
         hallar_c2_perps(&arr_elems,array_SEAS[i],molecula,&num_total_elementos);
     }
+
+
+
     double cand_plano_horizontal[3];
     prodvect(molecula.arr_atoms[0].pos,molecula.arr_atoms[1].pos,cand_plano_horizontal);
     normaliza_vec(cand_plano_horizontal);
@@ -94,7 +131,11 @@ int main() {
         printf("%d\t%d\t%lf\t%lf\t%lf\n",arr_elems[i].ref,arr_elems[i].order,arr_elems[i].vec_dic[0],arr_elems[i].vec_dic[1],arr_elems[i].vec_dic[2]);
     }
     impr_elems_sim(arr_elems,num_total_elementos);
-    printf("Candidato a lano horizontal: X:%lf\tY:%lf\tZ:%lf\n",cand_plano_horizontal[0],cand_plano_horizontal[1],cand_plano_horizontal[2]);
+    printf("Candidato a plano horizontal: X:%lf\tY:%lf\tZ:%lf\n",cand_plano_horizontal[0],cand_plano_horizontal[1],cand_plano_horizontal[2]);
+
+
+    printf ("\n\nLa molécula analizada es:\n\n");
+    impr_mol(molecula);
 
     free(arr_elems);
     arr_elems = NULL;
